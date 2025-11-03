@@ -1,5 +1,5 @@
-DIR?=blink
-FILE?=blink
+DIR?=src
+FILE?=main
 
 SRC_DIR = $(DIR)
 BLINK_DIR = blink
