@@ -2,6 +2,10 @@
 #ifndef __CONSTANTS_H__
 #define __CONSTANTS_H__
 
+/*
+ * Global constants
+ */
+
 #ifndef __AVR_ATmega328P__
 #define __AVR_ATmega328P__
 #endif
@@ -14,6 +18,10 @@
 #ifndef MYUBRR
 #define MYUBRR F_CPU / 8 / BAUD - 1
 #endif
+
+/*
+ * Led specific constants
+ */
 
 #ifndef SDI_ON
 #define SDI_ON PORTB |= (1 << PB3)
