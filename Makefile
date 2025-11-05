@@ -39,7 +39,7 @@ _build:
 	mkdir -p $(BUILD_DIR)
 
 com: 
-	minicom -b 38400 -o -D /dev/ttyACM0
+	minicom -b 115200 -o -D /dev/ttyACM0
 
 clean:
 	rm -rf $(BUILD_DIR)
