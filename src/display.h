@@ -5,9 +5,9 @@
 
 #include <avr/io.h>
 
-int display_main(void);
-/** 
+/**
  * Launch the main display loop
-*/
+ */
+int display_main(void);
 
 #endif

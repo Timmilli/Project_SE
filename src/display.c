@@ -1,10 +1,9 @@
 #include "constants.h"
-#include "led_com.h"
+
 #include "hall_sensor.h"
+#include "led_com.h"
 
 #include <avr/io.h>
-#include <stdlib.h>
-#include <time.h>
 #include <util/delay.h>
 
 
