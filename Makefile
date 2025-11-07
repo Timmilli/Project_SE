@@ -1,3 +1,5 @@
+.PHONY = clean build install os
+
 FILE ?= main
 
 SRC_DIR = src
