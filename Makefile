@@ -63,5 +63,5 @@ com:
 
 clean:
 	$(CLEAN_CLI)
-	
+
 all: build install
