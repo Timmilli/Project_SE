@@ -26,17 +26,17 @@ $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf
 	avr-objcopy -O ihex $< $@ 
 
 install: build $(BUILD_DIR)/$(FILE).bin
-	avrdude -p atmega328p -vvv -c usbasp -U flash:w:$(BUILD_DIR)/$(FILE).bin:i
+	avrdude -p atmega328p -c usbasp -U flash:w:$(BUILD_DIR)/$(FILE).bin:i
 
 build: _build $(BUILD_DIR)/$(FILE).elf
 
 _build:
-	mkdir $(BUILD_DIR)
+	if not exist $(BUILD_DIR) mkdir $(BUILD_DIR) 
 
 com: 
 	minicom -b 38400 -o -D /dev/ttyACM0
 
 clean:
-	rm $(BUILD_DIR) 
+	@if exist $(BUILD_DIR) rd /s /q $(BUILD_DIR)
 
-all: build
+all: build install clean
