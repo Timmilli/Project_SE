@@ -10,14 +10,9 @@ SRC = $(filter-out $(SRC_DIR)/$(FILE).c, $(wildcard $(SRC_DIR)/*.c))
 OBJ = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRC))
 ELF = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.elf, $(SRC))
 BIN = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.bin, $(SRC))
-
-MMCU = atmega328p
-
-CFLAGS = -mmcu=$(MMCU) -Os
-
-ifdef USE_RANDOM
-CFLAGS += -DUSE_RANDOM
-endif
+blabblaalblal:
+	echo blblal
+MMCU=atmega328p
 
 default: all
 
@@ -28,20 +23,20 @@ $(BUILD_DIR)/$(FILE).elf: $(OBJ)
 	avr-gcc $(CFLAGS) $(INCLUDE_FLAGS) -o $@ $(SRC_DIR)/$(FILE).c $^
 
 $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf
-	avr-objcopy -O binary $< $@ 
+	avr-objcopy -O ihex $< $@ 
 
 install: build $(BUILD_DIR)/$(FILE).bin
-	avrdude -p $(MMCU) -c usbasp -P /dev/ttyACM0 -U flash:w:$(BUILD_DIR)/$(FILE).bin
+	avrdude -p atmega328p -vvv -c usbasp -U flash:w:$(BUILD_DIR)/$(FILE).bin:i
 
 build: _build $(BUILD_DIR)/$(FILE).elf
 
 _build:
-	mkdir -p $(BUILD_DIR)
+	mkdir $(BUILD_DIR)
 
 com: 
 	minicom -b 38400 -o -D /dev/ttyACM0
 
 clean:
-	rm -rf $(BUILD_DIR)
+	rm $(BUILD_DIR) 
 
 all: build
