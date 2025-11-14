@@ -58,7 +58,7 @@ int led_com_main(void) {
   uint16_t datastreak = 0;
 
   while (1) {
-    pwm(500);
+    pwm(5);
 
     write_datastreak(datastreak);
     if (datastreak == 0b1111111111111111) {
