@@ -3,12 +3,13 @@
 #include "buffer.h"
 #include "led_com.h"
 #include "uart_com.h"
+#include "uart_receive.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <stdio.h>
 #include <util/delay.h>
 
-void uart_init(uint32_t ubrr) {
+void uart_init(unsigned int ubrr) {
   /* Baud rate */
   UBRR0H = (ubrr >> 8);
   UBRR0L = ubrr;

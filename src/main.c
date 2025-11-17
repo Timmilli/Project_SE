@@ -5,7 +5,6 @@
 #include "uart_com.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
-#include <string.h>
 #include <util/delay.h>
 
 struct ring_buffer rb;
