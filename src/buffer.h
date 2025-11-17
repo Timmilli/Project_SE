@@ -8,27 +8,30 @@
 #define RING_BUFFER_SIZE 32
 
 struct ring_buffer {
-  uint8_t counter;         // such as counter < RING_BUFFER_SIZE
-  uint8_t last_data_index; // such as last_data_index < RING_BUFFER_SIZE
+  uint8_t head;
+  uint8_t tail;
   uint8_t data[RING_BUFFER_SIZE];
 };
 
-// Initialise le buffer circulaire
+// Initialize the buffer
+// Also resets the data array
 void ring_buffer_init(struct ring_buffer *rb);
 
-// Ajoute un octet dans le buffer circulaire
+// Adds a byte to the buffer
+// Does not check if buffer full
 void ring_buffer_put(struct ring_buffer *rb, uint8_t data);
 
-// Récupère un octet du buffer circulaire
+// Get a byte from the buffer
+// Does not check if buffer full
 uint8_t ring_buffer_get(struct ring_buffer *rb);
 
-// Indique le nombre d'octets stockés dans le buffer circulaire
+// Indicates the number of bytes currently used in the buffer
 uint8_t ring_buffer_available_bytes(struct ring_buffer *rb);
 
-// Indique si le buffer circulaire est plein
+// Indicates if the buffer is full
 uint8_t ring_buffer_is_full(struct ring_buffer *rb);
 
-// Affiche le contenu du buffer
+// Prints the buffer content
 void ring_buffer_print(struct ring_buffer *rb);
 
 #endif // __BUFFER_H__

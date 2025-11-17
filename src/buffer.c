@@ -1,38 +1,41 @@
+#include "constants.h"
+
 #include "buffer.h"
-#include <stdint.h>
+#include <avr/io.h>
 #include <stdio.h>
 
-// Initialise le buffer circulaire
 void ring_buffer_init(struct ring_buffer *rb) {
-  rb->counter = 0;
-  rb->last_data_index = 0;
+  rb->tail = 0;
+  rb->head = 0;
+  for (uint8_t i = 0; i < RING_BUFFER_SIZE; i++)
+    rb->data[i] = 0;
 }
 
-// Ajoute un octet dans le buffer circulaire
-// Called only when not full
 void ring_buffer_put(struct ring_buffer *rb, uint8_t data) {
-  rb->data[rb->last_data_index++] = data;
+  rb->data[rb->head] = data;
+  rb->head = (rb->head + 1) % RING_BUFFER_SIZE;
 }
 
-// Récupère un octet du buffer circulaire
 uint8_t ring_buffer_get(struct ring_buffer *rb) {
-  if (rb->counter >= rb->last_data_index)
-    rb->counter = 0;
-  return rb->data[rb->counter++];
+  uint8_t data = rb->data[rb->tail];
+  rb->tail = (rb->tail + 1) % RING_BUFFER_SIZE;
+  return data;
 }
 
-// Indique le nombre d'octets stockés dans le buffer circulaire
 uint8_t ring_buffer_available_bytes(struct ring_buffer *rb) {
-  return rb->last_data_index;
+  if (rb->head >= rb->tail) {
+    return rb->head - rb->tail;
+  } else {
+    return RING_BUFFER_SIZE - (rb->tail - rb->head);
+  }
 }
 
-// Indique si le buffer circulaire est plein
 uint8_t ring_buffer_is_full(struct ring_buffer *rb) {
-  return rb->last_data_index >= RING_BUFFER_SIZE;
+  return ((rb->head + 1) % RING_BUFFER_SIZE) == rb->tail;
 }
 
 void ring_buffer_print(struct ring_buffer *rb) {
-  for (uint8_t i = 0; i < rb->last_data_index; i++) {
+  for (uint8_t i = 0; i < RING_BUFFER_SIZE; i++) {
     printf("%c", rb->data[i]);
   }
 }
