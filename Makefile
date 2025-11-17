@@ -42,10 +42,10 @@ os:
 	@echo $(MKDIR_FLAG)
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
-	avr-gcc $(CFLAGS) $(INCLUDE_FLAGS) -c -o $@ $<
+	avr-gcc -mmcu=$(MMCU) $(CFLAGS) $(INCLUDE_FLAGS) -c -o $@ $<
 
 $(BUILD_DIR)/$(FILE).elf: $(OBJ)
-	avr-gcc $(CFLAGS) $(INCLUDE_FLAGS) -o $@ $(SRC_DIR)/$(FILE).c $^
+	avr-gcc -mmcu=$(MMCU) $(CFLAGS) $(INCLUDE_FLAGS) -o $@ $(SRC_DIR)/$(FILE).c $^
 
 $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.elf
 	avr-objcopy -O $(BINARY_TYPE) $< $@ 
