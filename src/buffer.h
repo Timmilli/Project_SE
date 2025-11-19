@@ -16,7 +16,11 @@ typedef enum {
 /**
  * Defines the ring buffer structure
  */
-typedef struct ring_buffer ring_buffer_t;
+typedef struct {
+  uint8_t head;
+  uint8_t tail;
+  uint8_t data[RING_BUFFER_SIZE];
+} ring_buffer_t;
 
 /**
  * Initializes the ring buffer to work as a FIFO

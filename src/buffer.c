@@ -4,15 +4,6 @@
 #include <avr/io.h>
 
 /**
- * Defines the ring buffer structure
- */
-struct ring_buffer {
-  uint8_t head;
-  uint8_t tail;
-  uint8_t data[RING_BUFFER_SIZE];
-};
-
-/**
  * Initializes the ring buffer to work as a FIFO
  * @param rb empty ring_buffer
  */
