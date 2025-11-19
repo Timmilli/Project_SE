@@ -52,6 +52,14 @@
 #endif
 
 /*
+ * Ring buffer specific constants
+ */
+
+#ifndef RING_BUFFER_SIZE
+#define RING_BUFFER_SIZE 32
+#endif
+
+/*
  * USART specific constants
  */
 
