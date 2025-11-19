@@ -51,4 +51,15 @@
 #define OE_OFF PORTC &= ~(1 << PC1)
 #endif
 
+/*
+ * USART specific constants
+ */
+
+#ifndef UDRIE_INTERRUPT_ON
+#define UDRIE_INTERRUPT_ON UCSR0B = (1 << UDRIE0)
+#endif
+#ifndef UDRIE_INTERRUPT_OFF
+#define UDRIE_INTERRUPT_OFF UCSR0B &= ~(1 << UDRIE0)
+#endif
+
 #endif // __CONSTANTS_H__

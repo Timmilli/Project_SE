@@ -20,7 +20,7 @@ ISR(USART_UDRE_vect) {
   if (ring_buffer_available_bytes(&tx_buffer) > 0)
     uart_send_byte(&tx_buffer);
   else
-    UCSR0B &= ~(1 << UDRIE0); // interrupt on data register empty
+    UDRIE_INTERRUPT_OFF; // interrupt on data register empty
 }
 
 int main(void) {

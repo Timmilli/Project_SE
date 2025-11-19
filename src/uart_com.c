@@ -1,7 +1,6 @@
 #include "constants.h"
 
 #include "buffer.h"
-#include "led_com.h"
 #include "uart_com.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
@@ -23,9 +22,6 @@ void uart_init(uint32_t ubrr) {
   UCSR0C |= (1 << UCSZ00) | (1 << UCSZ01);  // character size
 
   UCSR0B |= (1 << RXCIE0); // interrupt on receive complete
-
-  // UCSR0B |= (1 << UDRIE0); // interrupt on data register empty
-  // to activate only when something is yet to be sent
 }
 
 void uart_send_byte(ring_buffer_t *rb) {
@@ -38,7 +34,7 @@ void uart_send_string(char *str, ring_buffer_t *rb) {
   while (str[i] != '\0') {
     if (!ring_buffer_is_full(rb))
       ring_buffer_put(rb, str[i++]);
-    UCSR0B |= (1 << UDRIE0); // interrupt on data register empty
+    UDRIE_INTERRUPT_ON;
   }
 }
 
