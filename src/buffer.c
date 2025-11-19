@@ -9,7 +9,7 @@
  */
 void ring_buffer_init(ring_buffer_t *rb) {
   rb->tail = 0;
-  rb->head = 0;
+  rb->counter = 0;
   for (uint8_t i = 0; i < RING_BUFFER_SIZE; i++)
     rb->data[i] = 0;
 }
@@ -20,8 +20,10 @@ void ring_buffer_init(ring_buffer_t *rb) {
  * @param data
  */
 void ring_buffer_put(ring_buffer_t *rb, uint8_t data) {
-  rb->data[rb->head] = data;
-  rb->head = (rb->head + 1) % RING_BUFFER_SIZE;
+  if (data != '\n' & data != '\r') {
+    rb->data[(rb->tail + rb->counter) % RING_BUFFER_SIZE] = data;
+    rb->counter = rb->counter + 1;
+  }
 }
 
 /**
@@ -32,6 +34,7 @@ void ring_buffer_put(ring_buffer_t *rb, uint8_t data) {
 uint8_t ring_buffer_get(ring_buffer_t *rb) {
   uint8_t data = rb->data[rb->tail];
   rb->tail = (rb->tail + 1) % RING_BUFFER_SIZE;
+  rb->counter -= 1;
   return data;
 }
 
@@ -40,13 +43,14 @@ uint8_t ring_buffer_get(ring_buffer_t *rb) {
  * @param rb a ring buffer
  * @returns the number of bytes used
  */
-uint8_t ring_buffer_available_bytes(ring_buffer_t *rb) {
-  if (rb->head >= rb->tail) {
-    return rb->head - rb->tail;
-  } else {
-    return RING_BUFFER_SIZE - (rb->tail - rb->head);
-  }
-}
+uint8_t ring_buffer_available_bytes(ring_buffer_t *rb) { return rb->counter; }
+
+/**
+ * Indicates if the buffer is empty
+ * @param rb a ring buffer
+ * @returns 1 if empty, 0 otherwise
+ */
+uint8_t ring_buffer_is_empty(ring_buffer_t *rb) { return rb->counter == 0; }
 
 /**
  * Indicates if the buffer is full
@@ -54,7 +58,7 @@ uint8_t ring_buffer_available_bytes(ring_buffer_t *rb) {
  * @returns 1 if full, 0 otherwise
  */
 uint8_t ring_buffer_is_full(ring_buffer_t *rb) {
-  return ((rb->head + 1) % RING_BUFFER_SIZE) == rb->tail;
+  return rb->counter == RING_BUFFER_SIZE;
 }
 
 /**
@@ -84,7 +88,8 @@ uint8_t process_ring_buffer(ring_buffer_t *rb) {
       command[i] = ring_buffer_get(rb);
     }
     for (uint8_t i = 0; i < 6; i++) {
-      ring_buffer_get(rb);
+      uint8_t data = ring_buffer_get(rb);
+      data += data;
     }
 
     if (str_cmp(command, "set"))

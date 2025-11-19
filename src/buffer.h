@@ -17,7 +17,7 @@ typedef enum {
  * Defines the ring buffer structure
  */
 typedef struct {
-  uint8_t head;
+  uint8_t counter;
   uint8_t tail;
   uint8_t data[RING_BUFFER_SIZE];
 } ring_buffer_t;
@@ -48,6 +48,13 @@ uint8_t ring_buffer_get(ring_buffer_t *rb);
  * @returns the number of bytes used
  */
 uint8_t ring_buffer_available_bytes(ring_buffer_t *rb);
+
+/**
+ * Indicates if the buffer is empty
+ * @param rb a ring buffer
+ * @returns 1 if empty, 0 otherwise
+ */
+uint8_t ring_buffer_is_empty(ring_buffer_t *rb);
 
 /**
  * Indicates if the buffer is full
