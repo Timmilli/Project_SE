@@ -35,19 +35,16 @@ int main(void) {
   ring_buffer_init(&tx_buffer);
   ring_buffer_init(&rx_buffer);
 
-  write_datastreak(datastreak);
-
-  char *strhour = "SetHour\n";
-  char *strnone = "None\n";
-
   sei(); // activate interrupts
+
+  uart_send_string("Ready!", &tx_buffer);
 
   while (1) {
     process_action_e val = process_ring_buffer(&rx_buffer);
 
     switch (val) {
     case SET_HOUR:
-      uart_send_string(strhour, &tx_buffer);
+      uart_send_string("SetHour!\n", &tx_buffer);
       datastreak = ~datastreak;
       write_datastreak(datastreak);
       break;
