@@ -27,57 +27,61 @@ const uint16_t *get_hu_quarter(uint8_t hours_units) {
   case 9:
     return C2N9;
   }
+  return C2N0;
 }
 
 const uint16_t *get_ht_quarter(uint8_t hours_tens) {
   switch (hours_tens) {
   case 0:
-    return C2N0;
+    return C1N0;
   case 1:
-    return C2N1;
+    return C1N1;
   case 2:
-    return C2N2;
+    return C1N2;
   }
+  return C1N0;
 }
 
 const uint16_t *get_mu_quarter(uint8_t minutes_units) {
   switch (minutes_units) {
   case 0:
-    return C2N0;
+    return C4N0;
   case 1:
-    return C2N1;
+    return C4N1;
   case 2:
-    return C2N2;
+    return C4N2;
   case 3:
-    return C2N3;
+    return C4N3;
   case 4:
-    return C2N4;
+    return C4N4;
   case 5:
-    return C2N5;
+    return C4N5;
   case 6:
-    return C2N6;
+    return C4N6;
   case 7:
-    return C2N7;
+    return C4N7;
   case 8:
-    return C2N8;
+    return C4N8;
   case 9:
-    return C2N9;
+    return C4N9;
   }
+  return C4N0;
 }
 
 const uint16_t *get_mt_quarter(uint8_t minutes_tens) {
   switch (minutes_tens) {
   case 0:
-    return C2N0;
+    return C3N0;
   case 1:
-    return C2N1;
+    return C3N1;
   case 2:
-    return C2N2;
+    return C3N2;
   case 3:
-    return C2N3;
+    return C3N3;
   case 4:
-    return C2N4;
+    return C3N4;
   case 5:
-    return C2N5;
+    return C3N5;
   }
+  return C3N0;
 }
