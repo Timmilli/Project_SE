@@ -1,6 +1,5 @@
 #include "constants.h"
 
-#include "encoding.h"
 #include "merge_matrices.h"
 #include "quarter_selection.h"
 #include <avr/io.h>
