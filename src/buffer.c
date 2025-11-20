@@ -80,6 +80,9 @@ uint8_t str_cmp(char fstr[3], char sstr[3]) {
  * indicating the data read
  * @param rb a ring buffer
  * @returns a process_action_e value
+ *
+ * Accepted formats :
+ * - setHHMMSS ('set' then 6 digits)
  */
 uint8_t process_ring_buffer(ring_buffer_t *rb) {
   if (ring_buffer_available_bytes(rb) >= 9) {
