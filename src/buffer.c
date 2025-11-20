@@ -1,6 +1,7 @@
 #include "constants.h"
 
 #include "buffer.h"
+#include "clock_module.h"
 #include <avr/io.h>
 
 /**
@@ -90,13 +91,30 @@ uint8_t process_ring_buffer(ring_buffer_t *rb) {
     for (uint8_t i = 0; i < 3; i++) {
       command[i] = ring_buffer_get(rb);
     }
-    for (uint8_t i = 0; i < 6; i++) {
-      uint8_t data = ring_buffer_get(rb);
-      data += data;
-    }
 
-    if (str_cmp(command, "set"))
+    if (str_cmp(command, "set")) {
+      uint8_t tens = ring_buffer_get(rb) - '0';
+      uint8_t units = ring_buffer_get(rb) - '0';
+      ;
+      uint8_t h = 10 * tens + units;
+      tens = ring_buffer_get(rb) - '0';
+      ;
+      units = ring_buffer_get(rb) - '0';
+      ;
+      uint8_t m = 10 * tens + units;
+      tens = ring_buffer_get(rb) - '0';
+      ;
+      units = ring_buffer_get(rb) - '0';
+      ;
+      uint8_t s = 10 * tens + units;
+
+      clock_set_time(s, m, h);
       return SET_HOUR;
+    } else {
+      for (uint8_t i = 0; i < 6; i++) {
+        ring_buffer_get(rb);
+      }
+    }
   }
   return NONE;
 }
