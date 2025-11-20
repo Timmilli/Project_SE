@@ -1,6 +1,7 @@
 #include "constants.h"
 
 #include "buffer.h"
+#include "clock_module.h"
 #include "display.h"
 #include "led_com.h"
 #include "uart_com.h"
@@ -36,16 +37,18 @@ int main(void) {
   ring_buffer_init(&tx_buffer);
   ring_buffer_init(&rx_buffer);
 
+  uint8_t i = 0;
+  char str[16] = "hh:mm:ss\n";
+
   sei(); // activate interrupts
 
-  uart_send_string("Ready!", &tx_buffer);
+  uart_send_string("Ready!\n", &tx_buffer);
 
   while (1) {
     process_action_e val = process_ring_buffer(&rx_buffer);
 
     switch (val) {
     case SET_HOUR:
-      uart_send_string("SetHour!\n", &tx_buffer);
       datastreak = ~datastreak;
       write_datastreak(datastreak);
       break;
@@ -54,6 +57,12 @@ int main(void) {
     }
 
     pwm(5);
+
+    if (i++ >= 200) {
+      clock_to_string(str);
+      uart_send_string(str, &tx_buffer);
+      i = 0;
+    }
   }
   return 1;
 }
