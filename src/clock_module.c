@@ -2,7 +2,6 @@
 
 #include "hall_sensor.h"
 #include "led_com.h"
-
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -44,9 +43,18 @@ uint32_t clock_get_minutes() { return minutes; }
 
 uint32_t clock_get_hours() { return hours; }
 
-void clock_set_time(long s, long min, long h) {
+void clock_set_time(uint8_t s, uint8_t min, uint8_t h) {
   last_update_time = micros();
   seconds = s;
   minutes = min;
   hours = h;
+}
+
+void clock_to_string(char str[16]) {
+  str[0] = '0' + hours / 10;
+  str[1] = '0' + hours % 10;
+  str[3] = '0' + minutes / 10;
+  str[4] = '0' + minutes % 10;
+  str[6] = '0' + seconds / 10;
+  str[7] = '0' + seconds % 10;
 }
