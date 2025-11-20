@@ -38,7 +38,7 @@ center = (w - 1) / 2.0
 
 # === CREATE MATRIX ===
 num_angles = int(360 / THETA_RES)
-display_matrix = [["0"] * NUM_LEDS for _ in range(num_angles)]
+display_matrix = [[0] * NUM_LEDS for _ in range(num_angles)]
 
 def pixel_to_led(value):
     """
@@ -67,13 +67,14 @@ for j, theta in enumerate(range(0, 360, THETA_RES)):
 OUTPUT_DIR = os.path.join(BASE_DIR, "converted_images")
 os.makedirs(OUTPUT_DIR, exist_ok=True)  # creates directory if it doesn't exist
 
-OUTPUT_FILE = os.path.join(OUTPUT_DIR, f"{NAME}.txt")
+OUTPUT_FILE = os.path.join(OUTPUT_DIR, f"{NAME}.h")
 
 with open(OUTPUT_FILE, "w") as f:
-    f.write("const uint8_t ledList[numberOfPositions][numberOfLeds] PROGMEM = {\n")
+    f.write(f"#ifndef __ENCODING_H__ \n#define __ENCODING_H__ \n#include \"constants.h\" \n#include <avr/io.h> \n#define NUMBER_OF_POSITIONS 120 \n#define NUMBER_OF_POSITIONS {len(display_matrix)}")
+    f.write(f"\nconst uint16_t led_list[NUMBER_OF_POSITIONS] PROGMEM = " + "{ \n")
     for idx, row in enumerate(display_matrix):
-        row_str = ", ".join(row)
-        f.write(f"  {{{row_str}}}")
+        row_str = "".join(row)
+        f.write(f"  0b{row_str}")
         if idx < len(display_matrix) - 1:
             f.write(",\n")
     f.write("\n};\n")
