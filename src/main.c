@@ -2,7 +2,7 @@
 
 #include "buffer.h"
 #include "clock_module.h"
-#include "display.h"
+#include "hall_sensor.h"
 #include "led_com.h"
 #include "uart_com.h"
 #include <avr/interrupt.h>
@@ -11,6 +11,7 @@
 
 ring_buffer_t tx_buffer;
 ring_buffer_t rx_buffer;
+clock_values_t cv;
 uint16_t datastreak = 0b1111100000011111;
 
 /**
@@ -34,35 +35,45 @@ ISR(USART_UDRE_vect) {
 int main(void) {
   setup_led_driver_com();
   uart_init(MYUBRR);
+  setup_hall_sensor();
+
   ring_buffer_init(&tx_buffer);
   ring_buffer_init(&rx_buffer);
+  clock_init(&cv);
 
   uint8_t i = 0;
   char str[16] = "hh:mm:ss\n";
 
+  datastreak = clock_get_seconds(&cv) + (clock_get_minutes(&cv) << 6) +
+               (clock_get_hours(&cv) << 12);
+  write_datastreak(datastreak);
   sei(); // activate interrupts
 
-  uart_send_string("Ready!\n", &tx_buffer);
+  uart_send_string("\n\nReady!\n", &tx_buffer);
 
   while (1) {
     process_action_e val = process_ring_buffer(&rx_buffer);
 
     switch (val) {
     case SET_HOUR:
-      datastreak = ~datastreak;
+      datastreak = clock_get_seconds(&cv) + (clock_get_minutes(&cv) << 6) +
+                   (clock_get_hours(&cv) << 12);
       write_datastreak(datastreak);
+      ring_buffer_update_clock(&rx_buffer, &cv);
+      uart_send_string("Clock set to: ", &tx_buffer);
+      clock_to_string(&cv, str);
+      uart_send_string(str, &tx_buffer);
       break;
+    case GET_HOUR:
+      clock_to_string(&cv, str);
+      uart_send_string("Current clock: ", &tx_buffer);
+      uart_send_string(str, &tx_buffer);
     default:
       break;
     }
 
-    pwm(5);
-
-    if (i++ >= 200) {
-      clock_to_string(str);
-      uart_send_string(str, &tx_buffer);
-      i = 0;
-    }
+    clock_update(&cv);
+    pwm(1);
   }
   return 1;
 }
