@@ -19,8 +19,7 @@ uint16_t mat[NUMBER_OF_POSITIONS] = {};
 /**
  * Receiving interrupt function
  */
-ISR(USART_RX_vect) 
-{
+ISR(USART_RX_vect) {
   if (!ring_buffer_is_full(&rx_buffer))
     uart_read_byte(&rx_buffer);
 }
@@ -28,8 +27,7 @@ ISR(USART_RX_vect)
 /**
  * Sending interrupt function
  */
-ISR(USART_UDRE_vect) 
-{
+ISR(USART_UDRE_vect) {
   if (ring_buffer_available_bytes(&tx_buffer) > 0)
     uart_send_byte(&tx_buffer);
   else
