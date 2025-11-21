@@ -66,7 +66,7 @@
  */
 
 #ifndef RING_BUFFER_SIZE
-#define RING_BUFFER_SIZE 32
+#define RING_BUFFER_SIZE 64
 #endif
 
 /*
