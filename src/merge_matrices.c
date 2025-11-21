@@ -1,12 +1,15 @@
 #include "constants.h"
 
+#include "clock_module.h"
 #include "merge_matrices.h"
 #include "quarter_selection.h"
 #include <avr/io.h>
 
-void merge_matrices(uint16_t mat[NUMBER_OF_POSITIONS], uint8_t hours_units,
-                    uint8_t hours_tens, uint8_t minutes_units,
-                    uint8_t minutes_tens) {
+void merge_matrices(uint16_t mat[NUMBER_OF_POSITIONS], clock_values_t *cv) {
+  uint8_t hours_units = cv->hours % 10;
+  uint8_t hours_tens = cv->hours / 10;
+  uint8_t minutes_units = cv->minutes % 10;
+  uint8_t minutes_tens = cv->minutes / 10;
   const uint16_t *hu_quarter = get_hu_quarter(hours_units);
   const uint16_t *ht_quarter = get_ht_quarter(hours_tens);
   const uint16_t *mu_quarter = get_mu_quarter(minutes_units);
