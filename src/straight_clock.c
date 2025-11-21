@@ -9,6 +9,7 @@
 #include <util/delay.h>
 
 uint16_t mat[NUMBER_OF_POSITIONS] = {};
+clock_values_t cv;
 
 void create_straight_clock(uint8_t hours, uint8_t minutes, uint8_t seconds) {
   uint8_t hours_tens = hours / 10;
@@ -23,11 +24,13 @@ int straight_clock_main() {
   srand(time(NULL));
   setup_hall_sensor();
   setup_led_driver_com();
+  clock_init(&cv);
+
   uint16_t datastreak = 0b0000000000000000;
-  clock_set_time(0, 0, 0);
+  clock_set_time(&cv, 0, 0, 0);
 
   while (1) { // Main loop
-    clock_update();
+    clock_update(&cv);
     uint32_t angle = get_current_angle();
     write_datastreak(mat[angle % 60]);
   }
