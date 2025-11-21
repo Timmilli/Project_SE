@@ -3,7 +3,7 @@ name: Auto-format C/C++ code
 on:
   push:
     branches:
-      - "pre-commit"
+      - "**"
 
 jobs:
   format:
